@@ -91,3 +91,22 @@ Public Class ApplicationSignInManager
         Return New ApplicationSignInManager(context.GetUserManager(Of ApplicationUserManager)(), context.Authentication)
     End Function
 End Class
+
+
+'// このアプリケーションで使用されるアプリケーション ロール マネージャーを設定します。
+'//  RoleManager は ASP.NET Identity の中で定義されており、このアプリケーションで使用されます。
+Public Class ApplicationRoleManager
+    Inherits RoleManager(Of ApplicationRole, String)
+
+    Public Sub New(store As IRoleStore(Of ApplicationRole, String))
+        MyBase.New(store)
+    End Sub
+
+    Public Shared Function Create(options As IdentityFactoryOptions(Of ApplicationRoleManager), context As IOwinContext) As ApplicationRoleManager
+        Dim manager = New ApplicationRoleManager(New RoleStore(Of ApplicationRole)(context.[Get](Of ApplicationDbContext)()))
+
+        Return manager
+    End Function
+
+End Class
+

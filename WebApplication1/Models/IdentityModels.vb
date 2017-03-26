@@ -15,6 +15,11 @@ Public Class ApplicationUser
     End Function
 End Class
 
+'// ロール機能を使用できるようにする
+Public Class ApplicationRole
+    Inherits IdentityRole
+End Class
+
 Public Class ApplicationDbContext
     Inherits IdentityDbContext(Of ApplicationUser)
     Public Sub New()

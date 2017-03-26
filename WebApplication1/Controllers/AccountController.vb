@@ -11,13 +11,15 @@ Public Class AccountController
     Inherits Controller
     Private _signInManager As ApplicationSignInManager
     Private _userManager As ApplicationUserManager
+    Private _roleManager As ApplicationRoleManager
 
     Public Sub New()
     End Sub
 
-    Public Sub New(appUserMan As ApplicationUserManager, signInMan As ApplicationSignInManager)
+    Public Sub New(appUserMan As ApplicationUserManager, signInMan As ApplicationSignInManager, appRoleMan As ApplicationRoleManager)
         UserManager = appUserMan
         SignInManager = signInMan
+        RoleManager = appRoleMan
     End Sub
 
     Public Property SignInManager() As ApplicationSignInManager
@@ -37,6 +39,17 @@ Public Class AccountController
             _userManager = value
         End Set
     End Property
+
+
+    Public Property RoleManager() As ApplicationRoleManager
+        Get
+            Return If(_roleManager, HttpContext.GetOwinContext().[Get](Of ApplicationRoleManager)())
+        End Get
+        Private Set(value As ApplicationRoleManager)
+            _roleManager = value
+        End Set
+    End Property
+
 
     '
     ' GET: /Account/Login
@@ -382,6 +395,10 @@ Public Class AccountController
             If _signInManager IsNot Nothing Then
                 _signInManager.Dispose()
                 _signInManager = Nothing
+            End If
+            If _roleManager IsNot Nothing Then
+                _roleManager.Dispose()
+                _roleManager = Nothing
             End If
         End If
 
